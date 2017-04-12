@@ -20,10 +20,11 @@ import android.widget.TextView;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import cn.moon.live.I;
 import cn.moon.live.R;
+import cn.moon.live.data.bean.User;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.OnCompleteListener;
-import cn.moon.live.data.model.User;
 import cn.moon.live.data.model.UserModel;
 import cn.moon.live.utils.MD5;
 import cn.moon.live.utils.Result;
@@ -78,6 +79,11 @@ public class LoginActivity extends BaseActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+        //获取注册后的用户名
+        String username = getIntent().getStringExtra(I.User.USER_NAME);
+        mEmailView.setText(username);
 
         findViewById(R.id.register).setOnClickListener(new OnClickListener() {
             @Override

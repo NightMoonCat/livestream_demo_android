@@ -148,7 +148,7 @@ public class EaseCommonUtils {
 		else
 			return "";
 	}
-	
+
 	/**
      * set initial letter of according user's nickname( username if no nickname)
      * 
