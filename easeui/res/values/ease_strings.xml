@@ -197,6 +197,7 @@
     <string name="temporary_does_not">Currently the video size greater than 10M is not supported!</string>
     <string name="Video_footage">Video record</string>
     <string name="User_name_cannot_be_empty">User name cannot be empty!</string>
+    <string name="User_nick_cannot_be_empty">User nick cannot be empty!</string>
     <string name="Password_cannot_be_empty">Password cannot be empty!</string>
     <string name="please_set_the_current">"Please set the current user's nickname \ n to ios offline push not userid but Nick, see comments"</string>
     <string name="Is_landing">logining..</string>

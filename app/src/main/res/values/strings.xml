@@ -3,7 +3,9 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">用户名</string>
+    <string name="prompt_nick">昵称</string>
     <string name="prompt_password">密码</string>
+    <string name="prompt_confirmPassword">确认密码</string>
     <string name="action_sign_in">登录</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">用户名不能为空</string>
