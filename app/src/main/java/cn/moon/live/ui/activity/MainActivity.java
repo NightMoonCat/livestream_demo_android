@@ -5,11 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cn.moon.live.R;
+
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.moon.live.LiveApplication;
+import cn.moon.live.R;
+import cn.moon.live.utils.MFGT;
 
 public class MainActivity extends BaseActivity {
 
@@ -38,8 +42,7 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.txt_logout) void logout() {
         EMClient.getInstance().logout(false, new EMCallBack() {
             @Override public void onSuccess() {
-                finish();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                MFGT.gotoLogin(MainActivity.this, LiveApplication.getCurrentUser().getMUserName());
             }
 
             @Override public void onError(int i, String s) {

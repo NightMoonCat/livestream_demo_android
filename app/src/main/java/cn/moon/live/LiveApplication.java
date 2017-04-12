@@ -9,7 +9,9 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.ucloud.ulive.UStreamingContext;
 
+import cn.moon.live.data.bean.User;
 import cn.moon.live.ui.activity.MainActivity;
+import cn.moon.live.utils.PreferenceManager;
 
 /**
  * Created by wei on 2016/5/27.
@@ -17,7 +19,19 @@ import cn.moon.live.ui.activity.MainActivity;
 public class LiveApplication extends Application {
 
     private static LiveApplication instance;
+    static User currentUser;
 
+    public static User getCurrentUser() {
+        if (currentUser == null) {
+            String username = PreferenceManager.getInstance().getCurrentUsername();
+            currentUser = new User(username);
+        }
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User user) {
+        LiveApplication.currentUser = user;
+    }
 
     @Override
     public void onCreate() {
@@ -30,6 +44,7 @@ public class LiveApplication extends Application {
         //UEasyStreaming.initStreaming("publish3-key");
 
         UStreamingContext.init(getApplicationContext(), "publish3-key");
+        PreferenceManager.init(instance);
     }
 
     public static LiveApplication getInstance() {

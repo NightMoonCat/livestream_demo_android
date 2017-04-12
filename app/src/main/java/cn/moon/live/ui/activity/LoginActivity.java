@@ -21,12 +21,14 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
 import cn.moon.live.I;
+import cn.moon.live.LiveApplication;
 import cn.moon.live.R;
 import cn.moon.live.data.bean.User;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.OnCompleteListener;
 import cn.moon.live.data.model.UserModel;
 import cn.moon.live.utils.MD5;
+import cn.moon.live.utils.PreferenceManager;
 import cn.moon.live.utils.Result;
 import cn.moon.live.utils.ResultUtils;
 
@@ -150,8 +152,10 @@ public class LoginActivity extends BaseActivity {
                         if (s != null) {
                             Result result = ResultUtils.getResultFromJson(s, User.class);
                             if (result != null && result.isRetMsg()) {
-
                                 loginEMServer(email, password);
+                                PreferenceManager.getInstance().setCurrentUserName(email.toString());
+                                User u = new User(email.toString());
+                                LiveApplication.setCurrentUser(u);
                             }
                         }
                     }
