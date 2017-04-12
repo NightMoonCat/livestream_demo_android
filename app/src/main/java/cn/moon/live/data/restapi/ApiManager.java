@@ -2,7 +2,7 @@ package cn.moon.live.data.restapi;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import cn.moon.live.DemoApplication;
+import cn.moon.live.LiveApplication;
 import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
 import cn.moon.live.data.restapi.model.ResponseModule;
@@ -35,8 +35,8 @@ public class ApiManager {
 
     private ApiManager(){
         try {
-            ApplicationInfo appInfo = DemoApplication.getInstance().getPackageManager().getApplicationInfo(
-                    DemoApplication.getInstance().getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo appInfo = LiveApplication.getInstance().getPackageManager().getApplicationInfo(
+                    LiveApplication.getInstance().getPackageName(), PackageManager.GET_META_DATA);
             appkey = appInfo.metaData.getString("EASEMOB_APPKEY");
             appkey = appkey.replace("#","/");
         } catch (PackageManager.NameNotFoundException e) {

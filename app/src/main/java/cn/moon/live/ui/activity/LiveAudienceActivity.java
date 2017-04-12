@@ -9,18 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cn.moon.live.data.restapi.model.LiveStatusModule;
 
 import com.bumptech.glide.Glide;
-import cn.moon.live.DemoConstants;
-import cn.moon.live.R;
-import cn.moon.live.ThreadPoolManager;
-import cn.moon.live.data.restapi.ApiManager;
-import cn.moon.live.data.restapi.LiveException;
-import cn.moon.live.data.restapi.model.StatisticsType;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -32,7 +22,19 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.ucloud.uvod.UMediaProfile;
 import com.ucloud.uvod.UPlayerStateListener;
 import com.ucloud.uvod.widget.UVideoView;
+
 import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.moon.live.LiveConstants;
+import cn.moon.live.R;
+import cn.moon.live.ThreadPoolManager;
+import cn.moon.live.data.restapi.ApiManager;
+import cn.moon.live.data.restapi.LiveException;
+import cn.moon.live.data.restapi.model.LiveStatusModule;
+import cn.moon.live.data.restapi.model.StatisticsType;
 
 public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerStateListener {
 
@@ -283,10 +285,10 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     private void sendPraiseMessage(int praiseCount) {
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
         message.setTo(chatroomId);
-        EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_PRAISE);
+        EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(LiveConstants.CMD_PRAISE);
         message.addBody(cmdMessageBody);
         message.setChatType(EMMessage.ChatType.ChatRoom);
-        message.setAttribute(DemoConstants.EXTRA_PRAISE_COUNT, praiseCount);
+        message.setAttribute(LiveConstants.EXTRA_PRAISE_COUNT, praiseCount);
         EMClient.getInstance().chatManager().sendMessage(message);
     }
 

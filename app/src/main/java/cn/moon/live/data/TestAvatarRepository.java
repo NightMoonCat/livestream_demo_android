@@ -2,7 +2,7 @@ package cn.moon.live.data;
 
 import android.content.Context;
 
-import cn.moon.live.DemoApplication;
+import cn.moon.live.LiveApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class TestAvatarRepository {
     List<Integer> indexList = new ArrayList<>();
     static int SIZE = 9;
     static {
-        Context context = DemoApplication.getInstance().getApplicationContext();
+        Context context = LiveApplication.getInstance().getApplicationContext();
         for(int i = 1; i <= SIZE; i++){
             String name = "test_avatar"+i;
             int resId = context.getResources().getIdentifier(name,"drawable",context.getPackageName());
