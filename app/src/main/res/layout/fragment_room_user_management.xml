@@ -1,12 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.easemob.livedemo.ui.activity.RoomUserManagementFragment"
     >
 
-    <com.easemob.livedemo.ui.widget.MySwipeRefreshLayout
+    <cn.moon.live.ui.widget.MySwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipe_refresh_layout"
@@ -17,5 +14,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </com.easemob.livedemo.ui.widget.MySwipeRefreshLayout>
+    </cn.moon.live.ui.widget.MySwipeRefreshLayout>
 </FrameLayout>

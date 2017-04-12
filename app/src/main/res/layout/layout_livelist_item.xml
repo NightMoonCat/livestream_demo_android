@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.easemob.livedemo.ui.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<cn.moon.live.ui.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                     android:layout_width="match_parent"
+                                     android:layout_height="wrap_content">
     <!--android:foreground="@drawable/grey_ripple"-->
 
     <ImageView
@@ -40,4 +40,4 @@
             />
 
     </RelativeLayout>
-</com.easemob.livedemo.ui.widget.SquareLayout>
+</cn.moon.live.ui.widget.SquareLayout>

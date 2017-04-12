@@ -7,7 +7,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.easemob.livedemo"
+        applicationId "cn.moon.live201612"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 2
