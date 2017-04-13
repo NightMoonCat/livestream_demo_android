@@ -14,19 +14,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.moon.live.R;
 import cn.moon.live.ThreadPoolManager;
 import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.ApiManager;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.ui.GridMarginDecoration;
-
-import com.bumptech.glide.Glide;
-import cn.moon.live.R;
-import com.hyphenate.exceptions.HyphenateException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,6 +82,9 @@ public class LiveListFragment extends Fragment {
 
     }
 
+    private void loadGiftList() {
+        ApiManager.get().getAllGifts();
+    }
 
     private void showLiveList(final boolean isLoadMore){
         if(!isLoadMore)
@@ -87,6 +92,8 @@ public class LiveListFragment extends Fragment {
         else
             loadmorePB.setVisibility(View.VISIBLE);
         isLoading = true;
+        loadGiftList();
+
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<ResponseModule<List<LiveRoom>>>() {
             @Override public ResponseModule<List<LiveRoom>> onRequest() throws HyphenateException {
                 if(!isLoadMore){

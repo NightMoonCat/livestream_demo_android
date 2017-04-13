@@ -50,6 +50,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.0.1'
     compile 'com.android.support:design:25.2.0'
     compile 'com.github.florent37:viewanimator:1.0.4'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.2.0'//ConverterFactory的String依赖包

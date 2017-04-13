@@ -104,7 +104,7 @@ public class ApiManager {
         return instance;
     }
 
-    private void loadUserInfo(String username) {
+    public void loadUserInfo(String username) {
         Call<String> call = liveService.loadUserInfo(username);
         call.enqueue(new Callback<String>() {
             @Override
@@ -124,7 +124,8 @@ public class ApiManager {
             }
         });
     }
-    private void getAllGifts() {
+
+    public void getAllGifts() {
         Call<String> call = liveService.getAllGifts();
         call.enqueue(new Callback<String>() {
             @Override
