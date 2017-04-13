@@ -3,25 +3,21 @@ package cn.moon.live.data;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.domain.User;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import cn.moon.I;
-import cn.moon.superwechat.SuperWeChatHelper;
-import cn.moon.superwechat.db.IUserModel;
-import cn.moon.superwechat.db.OnCompleteListener;
-import cn.moon.superwechat.db.UserModel;
-import cn.moon.superwechat.utils.CommonUtils;
-import cn.moon.superwechat.utils.L;
-import cn.moon.superwechat.utils.PreferenceManager;
-import cn.moon.superwechat.utils.Result;
-import cn.moon.superwechat.utils.ResultUtils;
+import cn.moon.live.I;
+import cn.moon.live.data.bean.User;
+import cn.moon.live.data.model.IUserModel;
+import cn.moon.live.data.model.OnCompleteListener;
+import cn.moon.live.data.model.UserModel;
+import cn.moon.live.utils.CommonUtils;
+import cn.moon.live.utils.L;
+import cn.moon.live.utils.PreferenceManager;
+import cn.moon.live.utils.Result;
+import cn.moon.live.utils.ResultUtils;
+
 
 public class UserProfileManager {
     private static final String TAG = "UserProfileManager";
@@ -37,15 +33,6 @@ public class UserProfileManager {
      * again
      */
     private boolean sdkInited = false;
-
-    /**
-     * HuanXin sync contact nick and avatar listener
-     */
-    private List<SuperWeChatHelper.DataSyncListener> syncContactInfosListeners;
-
-    private boolean isSyncingContactInfosWithServer = false;
-
-    private EaseUser currentUser;
     private User currentAppUser;
 
     public UserProfileManager() {
@@ -57,89 +44,16 @@ public class UserProfileManager {
         }
         this.appContext = context;
         mUserModel = new UserModel();
-        ParseManager.getInstance().onInit(context);
-        syncContactInfosListeners = new ArrayList<SuperWeChatHelper.DataSyncListener>();
         sdkInited = true;
         return true;
     }
 
-    public void addSyncContactInfoListener(SuperWeChatHelper.DataSyncListener listener) {
-        if (listener == null) {
-            return;
-        }
-        if (!syncContactInfosListeners.contains(listener)) {
-            syncContactInfosListeners.add(listener);
-        }
-    }
-
-    public void removeSyncContactInfoListener(SuperWeChatHelper.DataSyncListener listener) {
-        if (listener == null) {
-            return;
-        }
-        if (syncContactInfosListeners.contains(listener)) {
-            syncContactInfosListeners.remove(listener);
-        }
-    }
-
-    public void asyncFetchContactInfosFromServer(List<String> usernames, final EMValueCallBack<List<EaseUser>> callback) {
-        if (isSyncingContactInfosWithServer) {
-            return;
-        }
-        isSyncingContactInfosWithServer = true;
-        ParseManager.getInstance().getContactInfos(usernames, new EMValueCallBack<List<EaseUser>>() {
-
-            @Override
-            public void onSuccess(List<EaseUser> value) {
-                isSyncingContactInfosWithServer = false;
-                // in case that logout already before server returns,we should
-                // return immediately
-                if (!SuperWeChatHelper.getInstance().isLoggedIn()) {
-                    return;
-                }
-                if (callback != null) {
-                    callback.onSuccess(value);
-                }
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-                isSyncingContactInfosWithServer = false;
-                if (callback != null) {
-                    callback.onError(error, errorMsg);
-                }
-            }
-
-        });
-
-    }
-
-    public void notifyContactInfosSyncListener(boolean success) {
-        for (SuperWeChatHelper.DataSyncListener listener : syncContactInfosListeners) {
-            listener.onSyncComplete(success);
-        }
-    }
-
-    public boolean isSyncingContactInfoWithServer() {
-        return isSyncingContactInfosWithServer;
-    }
 
     public synchronized void reset() {
-        isSyncingContactInfosWithServer = false;
-        currentUser = null;
         currentAppUser = null;
         PreferenceManager.getInstance().removeCurrentUserInfo();
     }
 
-    public synchronized EaseUser getCurrentUserInfo() {
-        if (currentUser == null) {
-            String username = EMClient.getInstance().getCurrentUser();
-            currentUser = new EaseUser(username);
-            String nick = getCurrentUserNick();
-            currentUser.setNick((nick != null) ? nick : username);
-            currentUser.setAvatar(getCurrentUserAvatar());
-        }
-        return currentUser;
-    }
 
     public synchronized User getCurrentAppUserInfo() {
         if (currentAppUser == null || currentAppUser.getMUserName() == null) {
@@ -165,7 +79,6 @@ public class UserProfileManager {
                                 if (user != null) {
                                     updatenick = true;
                                     setCurrentAppUserNick(user.getMUserNick());
-                                    SuperWeChatHelper.getInstance().saveAppContact(user);
                                 }
 
                             }
@@ -199,7 +112,6 @@ public class UserProfileManager {
                                 if (user != null) {
                                     success = true;
                                     setCurrentAppUserAvatar(user.getAvatar());
-                                    SuperWeChatHelper.getInstance().saveAppContact(user);
                                 }
                             }
                         }
@@ -254,41 +166,8 @@ public class UserProfileManager {
     public void updateCurrentAppUserInfo(User user) {
         setCurrentAppUserNick(user.getMUserNick());
         setCurrentAppUserAvatar(user.getAvatar());
-        SuperWeChatHelper.getInstance().saveAppContact(user);
     }
 
-    public void asyncGetCurrentUserInfo() {
-        ParseManager.getInstance().asyncGetCurrentUserInfo(new EMValueCallBack<EaseUser>() {
-
-            @Override
-            public void onSuccess(EaseUser value) {
-                if (value != null) {
-                    setCurrentUserNick(value.getNick());
-                    setCurrentUserAvatar(value.getAvatar());
-                }
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-
-            }
-        });
-
-    }
-
-    public void asyncGetUserInfo(final String username, final EMValueCallBack<EaseUser> callback) {
-        ParseManager.getInstance().asyncGetUserInfo(username, callback);
-    }
-
-    private void setCurrentUserNick(String nickname) {
-        getCurrentUserInfo().setNick(nickname);
-        PreferenceManager.getInstance().setCurrentUserNick(nickname);
-    }
-
-    private void setCurrentUserAvatar(String avatar) {
-        getCurrentUserInfo().setAvatar(avatar);
-        PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
-    }
 
     private void setCurrentAppUserNick(String nickname) {
         getCurrentAppUserInfo().setMUserNick(nickname);
