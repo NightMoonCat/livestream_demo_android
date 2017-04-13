@@ -11,7 +11,7 @@ import com.hyphenate.chat.EMClient;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.moon.live.LiveApplication;
+import cn.moon.live.LiveHelper;
 import cn.moon.live.R;
 import cn.moon.live.utils.MFGT;
 
@@ -40,9 +40,11 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.txt_logout) void logout() {
-        EMClient.getInstance().logout(false, new EMCallBack() {
+
+        LiveHelper.getInstance().logout(false, new EMCallBack() {
             @Override public void onSuccess() {
-                MFGT.gotoLogin(MainActivity.this, LiveApplication.getCurrentUser().getMUserName());
+
+                MFGT.gotoLogin(MainActivity.this);
             }
 
             @Override public void onError(int i, String s) {
