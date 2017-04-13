@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.domain.User;
 
 import java.io.File;
 
 import cn.moon.live.I;
-import cn.moon.live.data.bean.User;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.OnCompleteListener;
 import cn.moon.live.data.model.UserModel;
@@ -48,7 +48,7 @@ public class UserProfileManager {
         return true;
     }
 
-
+    //重置方法，清空内存和SP中的方法
     public synchronized void reset() {
         currentAppUser = null;
         PreferenceManager.getInstance().removeCurrentUserInfo();
