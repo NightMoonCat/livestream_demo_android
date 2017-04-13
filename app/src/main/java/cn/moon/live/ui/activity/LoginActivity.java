@@ -19,15 +19,12 @@ import android.widget.TextView;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.domain.User;
 
-import cn.moon.live.I;
-import cn.moon.live.LiveApplication;
+import cn.moon.live.LiveHelper;
 import cn.moon.live.R;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.UserModel;
 import cn.moon.live.utils.MD5;
-import cn.moon.live.utils.PreferenceManager;
 
 /**
  * A login screen that offers login via email/password.
@@ -46,7 +43,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new UserModel();
-        if (EMClient.getInstance().isLoggedInBefore()) {
+        if (LiveHelper.getInstance().isLoggedIn()) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
             return;
@@ -81,8 +78,9 @@ public class LoginActivity extends BaseActivity {
 
 
         //获取注册后的用户名
-        String username = getIntent().getStringExtra(I.User.USER_NAME);
-        mEmailView.setText(username);
+        if (LiveHelper.getInstance().getCurrentUsernName() != null) {
+            mEmailView.setText(LiveHelper.getInstance().getCurrentUsernName());
+        }
 
         findViewById(R.id.register).setOnClickListener(new OnClickListener() {
             @Override
@@ -168,9 +166,10 @@ public class LoginActivity extends BaseActivity {
         EMClient.getInstance().login(email.toString(), MD5.getMessageDigest(password.toString()), new EMCallBack() {
             @Override
             public void onSuccess() {
-                PreferenceManager.getInstance().setCurrentUserName(email.toString());
-                User u = new User(email.toString());
-                LiveApplication.setCurrentUser(u);
+                //保存当前用户到SP中
+                LiveHelper.getInstance().setCurrentUserName(EMClient.getInstance().getCurrentUser());
+                //异步加载数据
+                LiveHelper.getInstance().getUserProfileManager().asyncGetCurrentAppUserInfo();
 
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
