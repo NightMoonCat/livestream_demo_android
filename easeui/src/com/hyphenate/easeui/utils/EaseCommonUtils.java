@@ -13,8 +13,12 @@
  */
 package com.hyphenate.easeui.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.text.TextUtils;
 
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
@@ -22,17 +26,13 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.domain.User;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.HanziToPinyin;
 import com.hyphenate.util.HanziToPinyin.Token;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.text.TextUtils;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EaseCommonUtils {
 	private static final String TAG = "CommonUtils";
@@ -152,7 +152,6 @@ public class EaseCommonUtils {
 	/**
      * set initial letter of according user's nickname( username if no nickname)
      * 
-     * @param username
      * @param user
      */
     public static void setUserInitialLetter(EaseUser user) {
@@ -193,7 +192,50 @@ public class EaseCommonUtils {
         }
         user.setInitialLetter(letter);
     }
-    
+	/**
+     * set our initial letter of according user's nickname( username if no nickname)
+     *
+     * @param user
+     */
+    public static void setAppUserInitialLetter(User user) {
+        final String DefaultLetter = "#";
+        String letter = DefaultLetter;
+
+        final class GetInitialLetter {
+            String getLetter(String name) {
+                if (TextUtils.isEmpty(name)) {
+                    return DefaultLetter;
+                }
+                char char0 = name.toLowerCase().charAt(0);
+                if (Character.isDigit(char0)) {
+                    return DefaultLetter;
+                }
+                ArrayList<Token> l = HanziToPinyin.getInstance().get(name.substring(0, 1));
+                if (l != null && l.size() > 0 && l.get(0).target.length() > 0)
+                {
+                    Token token = l.get(0);
+                    String letter = token.target.substring(0, 1).toUpperCase();
+                    char c = letter.charAt(0);
+                    if (c < 'A' || c > 'Z') {
+                        return DefaultLetter;
+                    }
+                    return letter;
+                }
+                return DefaultLetter;
+            }
+        }
+
+        if ( !TextUtils.isEmpty(user.getMUserNick()) ) {
+            letter = new GetInitialLetter().getLetter(user.getMUserNick());
+            user.setInitialLetter(letter);
+            return;
+        }
+        if (letter.equals(DefaultLetter) && !TextUtils.isEmpty(user.getMUserName())) {
+            letter = new GetInitialLetter().getLetter(user.getMUserName());
+        }
+        user.setInitialLetter(letter);
+    }
+
     /**
      * change the chat type to EMConversationType
      * @param chatType

@@ -7,9 +7,9 @@ import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.domain.User;
 import com.ucloud.ulive.UStreamingContext;
 
-import cn.moon.live.data.bean.User;
 import cn.moon.live.ui.activity.MainActivity;
 import cn.moon.live.utils.PreferenceManager;
 

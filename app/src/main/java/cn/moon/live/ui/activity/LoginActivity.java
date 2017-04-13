@@ -19,11 +19,11 @@ import android.widget.TextView;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.domain.User;
 
 import cn.moon.live.I;
 import cn.moon.live.LiveApplication;
 import cn.moon.live.R;
-import cn.moon.live.data.bean.User;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.UserModel;
 import cn.moon.live.utils.MD5;
