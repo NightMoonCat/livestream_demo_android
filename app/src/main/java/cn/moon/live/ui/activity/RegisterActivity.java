@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.moon.live.I;
+import cn.moon.live.LiveHelper;
 import cn.moon.live.R;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.OnCompleteListener;
@@ -111,7 +112,8 @@ public class RegisterActivity extends BaseActivity {
                         public void run() {
                             pd.dismiss();
                             showToast("注册成功");
-                            MFGT.gotoLogin(RegisterActivity.this,username);
+                            LiveHelper.getInstance().setCurrentUserName(username);
+                            MFGT.gotoLogin(RegisterActivity.this);
 
                         }
                     });
