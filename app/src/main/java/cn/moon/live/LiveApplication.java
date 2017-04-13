@@ -19,7 +19,7 @@ import cn.moon.live.utils.PreferenceManager;
 public class LiveApplication extends Application {
 
     private static LiveApplication instance;
-    static User currentUser;
+    private static User currentUser;
 
     public static User getCurrentUser() {
         if (currentUser == null) {
@@ -44,7 +44,6 @@ public class LiveApplication extends Application {
         //UEasyStreaming.initStreaming("publish3-key");
 
         UStreamingContext.init(getApplicationContext(), "publish3-key");
-        PreferenceManager.init(instance);
     }
 
     public static LiveApplication getInstance() {
@@ -58,6 +57,7 @@ public class LiveApplication extends Application {
         //options.setIMServer("120.26.4.73");
         //options.setImPort(6717);
 
+        PreferenceManager.init(this);
         EaseUI.getInstance().init(this, null);
         EMClient.getInstance().setDebugMode(true);
 
