@@ -2,43 +2,56 @@ package cn.moon.live.data.restapi;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.domain.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+
+import cn.moon.live.I;
 import cn.moon.live.LiveApplication;
+import cn.moon.live.data.model.Gift;
 import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.data.restapi.model.StatisticsType;
-import com.hyphenate.chat.EMClient;
-import java.io.IOException;
-import java.util.List;
-
+import cn.moon.live.utils.L;
+import cn.moon.live.utils.Result;
+import cn.moon.live.utils.ResultUtils;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import org.json.JSONException;
-import org.json.JSONObject;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by wei on 2017/2/14.
  */
 
 public class ApiManager {
+    private static final String TAG = "ApiManager";
     private String appkey;
     private ApiService apiService;
+    private LiveService liveService;
 
-    private static  ApiManager instance;
+    private static ApiManager instance;
 
-    private ApiManager(){
+    private ApiManager() {
         try {
             ApplicationInfo appInfo = LiveApplication.getInstance().getPackageManager().getApplicationInfo(
                     LiveApplication.getInstance().getPackageName(), PackageManager.GET_META_DATA);
             appkey = appInfo.metaData.getString("EASEMOB_APPKEY");
-            appkey = appkey.replace("#","/");
+            appkey = appkey.replace("#", "/");
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException("must set the easemob appkey");
         }
@@ -51,19 +64,27 @@ public class ApiManager {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://a1.easemob.com/"+appkey+"/")
+                .baseUrl("http://a1.easemob.com/" + appkey + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
 
         apiService = retrofit.create(ApiService.class);
 
+        Retrofit liveRetrofit = new Retrofit.Builder()
+                .baseUrl(I.SERVER_ROOT)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .client(httpClient)
+                .build();
+        liveService = liveRetrofit.create(LiveService.class);
+
     }
 
 
     static class RequestInterceptor implements Interceptor {
 
-        @Override public okhttp3.Response intercept(Chain chain) throws IOException {
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
             Request request = original.newBuilder()
                     .header("Authorization", "Bearer " + EMClient.getInstance().getAccessToken())
@@ -71,16 +92,60 @@ public class ApiManager {
                     .header("Content-Type", "application/json")
                     .method(original.method(), original.body())
                     .build();
-            okhttp3.Response response =  chain.proceed(request);
+            okhttp3.Response response = chain.proceed(request);
             return response;
         }
     }
 
-    public static ApiManager get(){
-        if(instance == null){
+    public static ApiManager get() {
+        if (instance == null) {
             instance = new ApiManager();
         }
         return instance;
+    }
+
+    private void loadUserInfo(String username) {
+        Call<String> call = liveService.loadUserInfo(username);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                L.e(TAG, "loadUserInfo(),response = " + response);
+                String s = response.body();
+                Result result = ResultUtils.getResultFromJson(s, User.class);
+                if (result != null && result.isRetMsg()) {
+                    User u = (User) result.getRetData();
+                    L.e(TAG,"onResponse(),u =" +u.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+    private void getAllGifts() {
+        Call<String> call = liveService.getAllGifts();
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                L.e(TAG, "getAllGifts(),response = " + response);
+                String s = response.body();
+                Result result = ResultUtils.getResultFromJson(s, Gift.class);
+                if (result != null && result.isRetMsg()) {
+                    List<Gift> list = (List<Gift>) result.getRetData();
+                    for (Gift gift : list) {
+                        L.e(TAG,"onResponse(),gift =" +gift.toString());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                L.e(TAG,"onFailure =" + t.toString());
+            }
+        });
     }
 
 
@@ -100,17 +165,17 @@ public class ApiManager {
         liveRoom.setCover(coverUrl);
 
         Call<ResponseModule<LiveRoom>> responseCall;
-        if(liveRoomId != null){
+        if (liveRoomId != null) {
             responseCall = apiService.createLiveShow(liveRoomId, liveRoom);
 
-        }else {
+        } else {
             responseCall = apiService.createLiveRoom(liveRoom);
         }
         ResponseModule<LiveRoom> response = handleResponseCall(responseCall).body();
         LiveRoom room = response.data;
-        if(room.getId() != null) {
+        if (room.getId() != null) {
             liveRoom.setId(room.getId());
-        }else {
+        } else {
             liveRoom.setId(liveRoomId);
         }
         liveRoom.setChatroomId(room.getChatroomId());
@@ -134,7 +199,6 @@ public class ApiManager {
     }
 
 
-
     //public void joinLiveRoom(String roomId, String userId) throws LiveException {
     //    JSONObject jobj = new JSONObject();
     //    String[] arr = new String[]{userId};
@@ -146,7 +210,6 @@ public class ApiManager {
     //    }
     //    handleResponseCall(apiService.joinLiveRoom(roomId, jsonToRequestBody(jobj.toString())));
     //}
-
 
 
     //public void updateLiveRoom(LiveRoom liveRoom) throws LiveException {
@@ -238,10 +301,10 @@ public class ApiManager {
         handleResponseCall(apiService.postStatistics(roomId, jsonToRequestBody(jobj.toString())));
     }
 
-    private <T> Response<T>handleResponseCall(Call<T> responseCall) throws LiveException{
+    private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException {
         try {
             Response<T> response = responseCall.execute();
-            if(!response.isSuccessful()){
+            if (!response.isSuccessful()) {
                 throw new LiveException(response.code(), response.errorBody().string());
             }
             return response;
@@ -250,7 +313,7 @@ public class ApiManager {
         }
     }
 
-    private RequestBody jsonToRequestBody(String jsonStr){
+    private RequestBody jsonToRequestBody(String jsonStr) {
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr);
     }
 }
