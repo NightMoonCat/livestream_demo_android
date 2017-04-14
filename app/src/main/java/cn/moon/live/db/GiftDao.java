@@ -1,6 +1,9 @@
 package cn.moon.live.db;
 
-import android.content.Context;
+import java.util.List;
+import java.util.Map;
+
+import cn.moon.live.data.model.Gift;
 
 /**
  * Created by Moon on 2017/4/14.
@@ -13,8 +16,15 @@ public class GiftDao {
     public static final String GIFT_COLUMN_URL = "gUrl";
     public static final String GIFT_COLUMN_PRICE = "gPrice";
 
-    public GiftDao(Context context) {
+    public GiftDao() {
+    }
 
+    public void saveAppGiftList(List<Gift> giftList) {
+        DBManager.getInstance().saveAppGiftList(giftList);
+    }
+
+    public Map<Integer, Gift> getAppGiftList() {
+        return DBManager.getInstance().getAppGiftList();
     }
 
 }
