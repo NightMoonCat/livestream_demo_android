@@ -101,9 +101,10 @@ public class ApiManager {
         }
         return instance;
     }
+
     private <T> Result<T> handleResponseCallToResult(Call<String> call, Class<T> clazz) throws LiveException {
         try {
-            Response<String > response = call.execute();
+            Response<String> response = call.execute();
             if (!response.isSuccessful()) {
                 throw new LiveException(response.code(), response.errorBody().string());
             }
@@ -113,9 +114,10 @@ public class ApiManager {
             throw new LiveException(e.getMessage());
         }
     }
+
     private <T> Result<List<T>> handleResponseCallToResultList(Call<String> call, Class<T> clazz) throws LiveException {
         try {
-            Response<String > response = call.execute();
+            Response<String> response = call.execute();
             if (!response.isSuccessful()) {
                 throw new LiveException(response.code(), response.errorBody().string());
             }
@@ -135,6 +137,16 @@ public class ApiManager {
         }
         return null;
 
+    }
+
+    public void createLiveRoom(String auth, String roomName, String description
+            , String owner, int maxUsers, String members) {
+        Call<String> call = liveService.createLiveRoom(auth, roomName, description, owner, maxUsers, members);
+    }
+
+    public void createLiveRoom(String roomName, String description) {
+        createLiveRoom("1IFgE", roomName, description, EMClient.getInstance().getCurrentUser(),
+                300, EMClient.getInstance().getCurrentUser());
     }
 
     public List<Gift> getAllGifts() throws LiveException {
