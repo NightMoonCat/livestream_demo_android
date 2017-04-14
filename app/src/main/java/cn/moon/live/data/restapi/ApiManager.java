@@ -104,25 +104,17 @@ public class ApiManager {
         return instance;
     }
 
-    public void loadUserInfo(String username) {
+    public User loadUserInfo(String username) throws IOException {
+        User user = null;
         Call<String> call = liveService.loadUserInfo(username);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                L.e(TAG, "loadUserInfo(),response = " + response);
-                String s = response.body();
-                Result result = ResultUtils.getResultFromJson(s, User.class);
-                if (result != null && result.isRetMsg()) {
-                    User u = (User) result.getRetData();
-                    L.e(TAG,"onResponse(),u =" +u.toString());
-                }
-            }
+        Response<String> response = call.execute();
+        String body = response.body();
+        if (body != null) {
+            Result result = ResultUtils.getResultFromJson(body, User.class);
+            user = (User) result.getRetData();
+        }
+        return user;
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
-            }
-        });
     }
 
     public void getAllGifts() {

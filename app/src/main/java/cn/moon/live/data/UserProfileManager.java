@@ -7,11 +7,13 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.User;
 
 import java.io.File;
+import java.io.IOException;
 
 import cn.moon.live.I;
 import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.OnCompleteListener;
 import cn.moon.live.data.model.UserModel;
+import cn.moon.live.data.restapi.ApiManager;
 import cn.moon.live.utils.CommonUtils;
 import cn.moon.live.utils.L;
 import cn.moon.live.utils.PreferenceManager;
@@ -134,33 +136,49 @@ public class UserProfileManager {
     }
 
     public void asyncGetCurrentAppUserInfo() {
-        mUserModel.loadUserInfo(appContext, EMClient.getInstance().getCurrentUser(),
-                new OnCompleteListener<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        L.e(TAG, "s=" + s);
-                        if (s != null) {
-                            Result result = ResultUtils.getResultFromJson(s, User.class);
-                            if (result != null && result.isRetMsg()) {
-
-                                User user  = (User) result.getRetData();
-
-                                L.e(TAG, "asyncGetCurrentAppUserInfo,userInfo = " + user.toString());
-
-                                if (user != null) {
-                                    L.e(TAG, "asyncGetCurrentAppUserInfo,userNick = " + user.getMUserNick());
-                                    currentAppUser = user;
-                                    updateCurrentAppUserInfo(user);
-                                }
-                            }
-                        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    User user = ApiManager.get().loadUserInfo(EMClient.getInstance().getCurrentUser());
+                    if (user != null) {
+                        currentAppUser = user;
+                        updateCurrentAppUserInfo(user);
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    @Override
-                    public void onError(String error) {
-                        L.e(TAG, "error=" + error);
-                    }
-                });
+            }
+        }).start();
+
+//        mUserModel.loadUserInfo(appContext, EMClient.getInstance().getCurrentUser(),
+//                new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        L.e(TAG, "s=" + s);
+//                        if (s != null) {
+//                            Result result = ResultUtils.getResultFromJson(s, User.class);
+//                            if (result != null && result.isRetMsg()) {
+//
+//                                User user  = (User) result.getRetData();
+//
+//                                L.e(TAG, "asyncGetCurrentAppUserInfo,userInfo = " + user.toString());
+//
+//                                if (user != null) {
+//                                    L.e(TAG, "asyncGetCurrentAppUserInfo,userNick = " + user.getMUserNick());
+//                                    currentAppUser = user;
+//                                    updateCurrentAppUserInfo(user);
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(String error) {
+//                        L.e(TAG, "error=" + error);
+//                    }
+//                });
     }
 
     public void updateCurrentAppUserInfo(User user) {
