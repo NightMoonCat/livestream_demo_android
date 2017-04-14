@@ -14,6 +14,7 @@ import cn.moon.live.data.model.IUserModel;
 import cn.moon.live.data.model.OnCompleteListener;
 import cn.moon.live.data.model.UserModel;
 import cn.moon.live.data.restapi.ApiManager;
+import cn.moon.live.data.restapi.LiveException;
 import cn.moon.live.utils.CommonUtils;
 import cn.moon.live.utils.L;
 import cn.moon.live.utils.PreferenceManager;
@@ -146,6 +147,8 @@ public class UserProfileManager {
                         updateCurrentAppUserInfo(user);
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LiveException e) {
                     e.printStackTrace();
                 }
 

@@ -19,7 +19,6 @@ import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.data.restapi.model.StatisticsType;
-import cn.moon.live.utils.L;
 import cn.moon.live.utils.Result;
 import cn.moon.live.utils.ResultUtils;
 import okhttp3.Interceptor;
@@ -28,7 +27,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -103,42 +101,70 @@ public class ApiManager {
         }
         return instance;
     }
-
-    public User loadUserInfo(String username) throws IOException {
-        User user = null;
-        Call<String> call = liveService.loadUserInfo(username);
-        Response<String> response = call.execute();
-        String body = response.body();
-        if (body != null) {
-            Result result = ResultUtils.getResultFromJson(body, User.class);
-            user = (User) result.getRetData();
+    private <T> Result<T> handleResponseCallToResult(Call<String> call, Class<T> clazz) throws LiveException {
+        try {
+            Response<String > response = call.execute();
+            if (!response.isSuccessful()) {
+                throw new LiveException(response.code(), response.errorBody().string());
+            }
+            String body = response.body();
+            return ResultUtils.getResultFromJson(body, clazz);
+        } catch (IOException e) {
+            throw new LiveException(e.getMessage());
         }
-        return user;
+    }
+    private <T> Result<List<T>> handleResponseCallToResultList(Call<String> call, Class<T> clazz) throws LiveException {
+        try {
+            Response<String > response = call.execute();
+            if (!response.isSuccessful()) {
+                throw new LiveException(response.code(), response.errorBody().string());
+            }
+            String body = response.body();
+            return ResultUtils.getListResultFromJson(body, clazz);
+        } catch (IOException e) {
+            throw new LiveException(e.getMessage());
+        }
+    }
+
+
+    public User loadUserInfo(String username) throws IOException, LiveException {
+        Call<String> call = liveService.loadUserInfo(username);
+        Result<User> result = handleResponseCallToResult(call, User.class);
+        if (result != null && result.isRetMsg()) {
+            return result.getRetData();
+        }
+        return null;
 
     }
 
-    public void getAllGifts() {
+    public List<Gift> getAllGifts() throws LiveException {
         Call<String> call = liveService.getAllGifts();
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                L.e(TAG, "getAllGifts(),response = " + response);
-                String s = response.body();
-                Result result = ResultUtils.getResultFromJson(s, Gift.class);
-                if (result != null && result.isRetMsg()) {
-                    List<Gift> list = (List<Gift>) result.getRetData();
-                    for (Gift gift : list) {
-                        L.e(TAG,"onResponse(),gift =" +gift.toString());
-                    }
+        Result<List<Gift>> result = handleResponseCallToResultList(call, Gift.class);
+        if (result != null && result.isRetMsg()) {
+            return result.getRetData();
+        }
 
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                L.e(TAG,"onFailure =" + t.toString());
-            }
-        });
+        return null;
+//        call.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                L.e(TAG, "getAllGifts(),response = " + response);
+//                String s = response.body();
+//                Result result = ResultUtils.getResultFromJson(s, Gift.class);
+//                if (result != null && result.isRetMsg()) {
+//                    List<Gift> list = (List<Gift>) result.getRetData();
+//                    for (Gift gift : list) {
+//                        L.e(TAG,"onResponse(),gift =" +gift.toString());
+//                    }
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//                L.e(TAG,"onFailure =" + t.toString());
+//            }
+//        });
     }
 
 

@@ -2,17 +2,17 @@ package cn.moon.live.utils;
 
 import java.io.Serializable;
 
-public class Result implements Serializable {
+public class Result<T> implements Serializable {
 	private int retCode = -1;
 	private boolean retMsg;
-	private Object retData;
+	private T retData;
 	public Result() {
 	}
 	public Result(boolean retMsg,int retCode){
 		this.retMsg = retMsg;
 		this.retCode = retCode;
 	}
-	public Result(int retCode, boolean retMsg, Object retData) {
+	public Result(int retCode, boolean retMsg, T retData) {
 		super();
 		this.retCode = retCode;
 		this.retMsg = retMsg;
@@ -30,10 +30,10 @@ public class Result implements Serializable {
 	public void setRetMsg(boolean retMsg) {
 		this.retMsg = retMsg;
 	}
-	public Object getRetData() {
+	public T getRetData() {
 		return retData;
 	}
-	public void setRetData(Object retData) {
+	public void setRetData(T retData) {
 		this.retData = retData;
 	}
 	@Override
