@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import com.hyphenate.exceptions.HyphenateException;
+
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -61,6 +63,8 @@ public class ThreadPoolManager {
                             task.onError(e);
                         }
                     });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -74,7 +78,7 @@ public class ThreadPoolManager {
          * @throws HyphenateException
          */
         @WorkerThread
-        Result onRequest() throws HyphenateException;
+        Result onRequest() throws HyphenateException, IOException;
 
         /**
          * execute on ui thread

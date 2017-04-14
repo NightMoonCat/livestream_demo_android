@@ -11,23 +11,27 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import cn.moon.live.data.model.LiveRoom;
 
-import cn.moon.live.R;
-import cn.moon.live.ThreadPoolManager;
-import cn.moon.live.data.restapi.ApiManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
 import com.hyphenate.cloud.HttpFileManager;
 import com.hyphenate.exceptions.HyphenateException;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.moon.live.R;
+import cn.moon.live.ThreadPoolManager;
+import cn.moon.live.data.model.LiveRoom;
+import cn.moon.live.data.restapi.ApiManager;
 
 public class CreateLiveRoomActivity extends BaseActivity {
 
@@ -86,7 +90,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
         executeTask(new ThreadPoolManager.Task<LiveRoom>() {
             HyphenateException exception;
             String coverUrl;
-            @Override public LiveRoom onRequest() throws HyphenateException {
+            @Override public LiveRoom onRequest() throws HyphenateException, IOException {
                 if(coverPath != null){
 
                     Map<String, String> headers = new HashMap<String, String>();

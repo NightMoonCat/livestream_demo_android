@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +164,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
         executeTask(new ThreadPoolManager.Task<LiveRoom>() {
             HyphenateException exception;
             String coverUrl;
-            @Override public LiveRoom onRequest() throws HyphenateException {
+            @Override public LiveRoom onRequest() throws HyphenateException, IOException {
                 if(coverPath != null){
 
                     Map<String, String> headers = new HashMap<String, String>();
