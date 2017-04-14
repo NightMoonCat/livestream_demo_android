@@ -1,8 +1,9 @@
-package cn.moon.live.db;
+package cn.moon.live.data.db;
 
 import java.util.List;
 import java.util.Map;
 
+import cn.moon.live.data.DBManager;
 import cn.moon.live.data.model.Gift;
 
 /**

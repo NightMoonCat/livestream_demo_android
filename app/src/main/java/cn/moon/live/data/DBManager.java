@@ -1,4 +1,4 @@
-package cn.moon.live.db;
+package cn.moon.live.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import cn.moon.live.LiveApplication;
+import cn.moon.live.data.db.DBOpenHelper;
+import cn.moon.live.data.db.GiftDao;
 import cn.moon.live.data.model.Gift;
 
 /**

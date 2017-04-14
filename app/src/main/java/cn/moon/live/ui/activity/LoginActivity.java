@@ -171,6 +171,7 @@ public class LoginActivity extends BaseActivity {
                 //异步加载数据
                 LiveHelper.getInstance().getUserProfileManager().asyncGetCurrentAppUserInfo();
 
+                LiveHelper.getInstance().syncLoadGiftList();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }

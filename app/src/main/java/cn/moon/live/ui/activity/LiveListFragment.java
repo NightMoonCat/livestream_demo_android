@@ -27,7 +27,6 @@ import cn.moon.live.R;
 import cn.moon.live.ThreadPoolManager;
 import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.ApiManager;
-import cn.moon.live.data.restapi.LiveException;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.ui.GridMarginDecoration;
 
@@ -83,26 +82,12 @@ public class LiveListFragment extends Fragment {
 
     }
 
-    private void loadGiftList() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ApiManager.get().getAllGifts();
-                } catch (LiveException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
     private void showLiveList(final boolean isLoadMore){
         if(!isLoadMore)
             swipeRefreshLayout.setRefreshing(true);
         else
             loadmorePB.setVisibility(View.VISIBLE);
         isLoading = true;
-        loadGiftList();
 
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<ResponseModule<List<LiveRoom>>>() {
             @Override public ResponseModule<List<LiveRoom>> onRequest() throws HyphenateException {

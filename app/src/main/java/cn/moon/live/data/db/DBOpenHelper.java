@@ -1,4 +1,4 @@
-package cn.moon.live.db;
+package cn.moon.live.data.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
