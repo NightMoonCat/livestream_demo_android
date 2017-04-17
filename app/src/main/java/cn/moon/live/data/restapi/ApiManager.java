@@ -153,7 +153,7 @@ public class ApiManager {
     public String createLiveRoom(String roomName, String description) throws IOException {
         L.e(TAG,"createLiveRoom,start");
         return createLiveRoom("1IFgE", roomName, description, EMClient.getInstance().getCurrentUser(),
-                300, EMClient.getInstance().getCurrentUser());
+                300, EMClient.getInstance().getCurrentUser()+",chen123,xsh123,hhhhh,gsd123,seven009,fffire");
     }
 
     public List<Gift> getAllGifts() throws LiveException {
