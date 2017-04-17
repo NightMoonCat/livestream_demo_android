@@ -26,13 +26,14 @@
         />
 
     <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/iv_user_avatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ease_default_avatar"
         android:layout_marginTop="80dp"
         />
     <TextView
-        android:id="@+id/tv_username"
+        android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="username"
