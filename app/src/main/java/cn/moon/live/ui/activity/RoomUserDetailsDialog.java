@@ -14,19 +14,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.EaseImageView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.moon.live.R;
 import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.utils.Utils;
-
-import cn.moon.live.R;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wei on 2016/7/25.
@@ -34,9 +38,14 @@ import java.util.List;
 public class RoomUserDetailsDialog extends DialogFragment {
 
     Unbinder unbinder;
-    @BindView(R.id.tv_username) TextView usernameView;
-    @BindView(R.id.btn_set_admin) Button setAdminButton;
-    @BindView(R.id.layout_management) RelativeLayout managementLayout;
+    @BindView(R.id.tv_username)
+    TextView usernameView;
+    @BindView(R.id.btn_set_admin)
+    Button setAdminButton;
+    @BindView(R.id.layout_management)
+    RelativeLayout managementLayout;
+    @BindView(R.id.iv_viewer_avatar)
+    EaseImageView mIvViewerAvatar;
 
     private String username;
     private String chatroomId;
@@ -51,33 +60,35 @@ public class RoomUserDetailsDialog extends DialogFragment {
         return dialog;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_room_user_details, container, false);
         unbinder = ButterKnife.bind(this, view);
         customDialog();
         return view;
     }
 
-    @Override public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             username = getArguments().getString("username");
             LiveRoom liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
             chatroomId = liveRoom.getChatroomId();
             liveId = liveRoom.getId();
-
             EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(chatroomId);
             List<String> adminList = chatRoom.getAdminList();
-            if(!EMClient.getInstance().getCurrentUser().equals(chatRoom.getOwner())) {
+            if (!EMClient.getInstance().getCurrentUser().equals(chatRoom.getOwner())) {
                 setAdminButton.setVisibility(View.INVISIBLE);
                 if (!adminList.contains(EMClient.getInstance().getCurrentUser()) ||
                         username.equals(EMClient.getInstance().getCurrentUser()) ||
                         username.equals(chatRoom.getOwner())) {
                     managementLayout.setVisibility(View.INVISIBLE);
                 }
-            }else{
-                if(username.equals(EMClient.getInstance().getCurrentUser())){
+            } else {
+                if (username.equals(EMClient.getInstance().getCurrentUser())) {
                     setAdminButton.setVisibility(View.INVISIBLE);
                     managementLayout.setVisibility(View.INVISIBLE);
                 }
@@ -85,6 +96,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
         }
         if (username != null) {
             usernameView.setText(username);
+            EaseUserUtils.setAppUserAvatar(getContext(), username, mIvViewerAvatar);
         }
         //mentionBtn.setText("@TA");
     }
@@ -100,70 +112,82 @@ public class RoomUserDetailsDialog extends DialogFragment {
         window.setAttributes(wlp);
     }
 
-    @OnClick(R.id.layout_live_no_talk) void mute() {
+    @OnClick(R.id.layout_live_no_talk)
+    void mute() {
         if (chatroomId != null) {
             EMClient.getInstance()
                     .chatroomManager()
                     .asyncMuteChatRoomMembers(chatroomId, getUserList(), -1,
                             new EMValueCallBack<EMChatRoom>() {
-                                @Override public void onSuccess(EMChatRoom value) {
+                                @Override
+                                public void onSuccess(EMChatRoom value) {
                                     showToast("禁言成功");
                                 }
 
-                                @Override public void onError(int error, String errorMsg) {
+                                @Override
+                                public void onError(int error, String errorMsg) {
                                     showToast("禁言失败");
                                 }
                             });
         }
     }
 
-    @OnClick(R.id.layout_live_add_blacklist) void addToBlacklist() {
+    @OnClick(R.id.layout_live_add_blacklist)
+    void addToBlacklist() {
         if (chatroomId != null) {
             EMClient.getInstance()
                     .chatroomManager()
                     .asyncBlockChatroomMembers(chatroomId, getUserList(),
                             new EMValueCallBack<EMChatRoom>() {
-                                @Override public void onSuccess(EMChatRoom value) {
-                                    if(eventListener != null){
+                                @Override
+                                public void onSuccess(EMChatRoom value) {
+                                    if (eventListener != null) {
                                         eventListener.onAddBlacklist(username);
                                     }
                                     showToast("加入黑名单成功");
                                 }
 
-                                @Override public void onError(int error, String errorMsg) {
+                                @Override
+                                public void onError(int error, String errorMsg) {
                                     showToast("加入黑名单失败");
                                 }
                             });
         }
     }
 
-    @OnClick(R.id.layout_live_kick) void kickMember() {
+    @OnClick(R.id.layout_live_kick)
+    void kickMember() {
         EMClient.getInstance()
                 .chatroomManager()
                 .asyncRemoveChatRoomMembers(chatroomId, getUserList(),
                         new EMValueCallBack<EMChatRoom>() {
-                            @Override public void onSuccess(EMChatRoom value) {
-                                if(eventListener != null){
+                            @Override
+                            public void onSuccess(EMChatRoom value) {
+                                if (eventListener != null) {
                                     eventListener.onKickMember(username);
                                 }
                                 showToast("踢出成功");
                             }
 
-                            @Override public void onError(int error, String errorMsg) {
+                            @Override
+                            public void onError(int error, String errorMsg) {
                                 showToast("踢出失败");
                             }
                         });
     }
 
-    @OnClick(R.id.btn_set_admin) void setToAdmin() {
+    @OnClick(R.id.btn_set_admin)
+    void setToAdmin() {
         EMClient.getInstance()
                 .chatroomManager()
                 .asyncAddChatRoomAdmin(chatroomId, username, new EMValueCallBack<EMChatRoom>() {
-                    @Override public void onSuccess(EMChatRoom value) {
+                    @Override
+                    public void onSuccess(EMChatRoom value) {
                         showToast("设置房管成功");
                     }
 
-                    @Override public void onError(int error, String errorMsg) {
+                    @Override
+                    public void onError(int error, String errorMsg) {
                         showToast("设置房管失败");
                     }
                 });
@@ -195,17 +219,19 @@ public class RoomUserDetailsDialog extends DialogFragment {
     }
 
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
     private RoomManageEventListener eventListener;
-    public void setManageEventListener(RoomManageEventListener eventListener){
+
+    public void setManageEventListener(RoomManageEventListener eventListener) {
         this.eventListener = eventListener;
     }
 
-    public interface RoomManageEventListener{
+    public interface RoomManageEventListener {
         void onKickMember(String username);
 
         void onAddBlacklist(String username);
