@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
@@ -74,10 +75,14 @@ public class CreateLiveRoomActivity extends BaseActivity {
     String name = null;
     String desc = null;
     @OnClick(R.id.btn_start_live) void startLive() {
-
-        if (!TextUtils.isEmpty(liveNameView.getText())){
+        if (TextUtils.isEmpty(liveNameView.getText().toString().trim())) {
+            Toast.makeText(this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
+            liveNameView.requestFocus();
+            return;
+        } else {
             name = liveNameView.getText().toString();
         }
+
         if (!TextUtils.isEmpty(liveDescView.getText())){
             desc = liveDescView.getText().toString();
         }
