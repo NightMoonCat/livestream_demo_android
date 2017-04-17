@@ -17,8 +17,6 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.easeui.widget.EaseImageView;
 import com.ucloud.ulive.UFilterProfile;
 import com.ucloud.ulive.UNetworkListener;
 import com.ucloud.ulive.UStreamStateListener;
@@ -63,10 +61,6 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     //UEasyStreaming.UEncodingType encodingType;
 
     boolean isStarted;
-    @BindView(R.id.iv_anchor_avatar)
-    EaseImageView mIvAnchorAvatar;
-    @BindView(R.id.tv_username)
-    TextView mTvUsername;
 
     private AVOption mAVOption;
 
@@ -87,14 +81,10 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         setContentView(R.layout.activity_live_anchor);
         ButterKnife.bind(this);
         initLiveEnv();
-        initAnchor();
+
         startLive();
     }
 
-    private void initAnchor() {
-        EaseUserUtils.setAppUserNick(EMClient.getInstance().getCurrentUser(),mTvUsername);
-        EaseUserUtils.setAppUserAvatar(LiveAnchorActivity.this,EMClient.getInstance().getCurrentUser(),mIvAnchorAvatar);
-    }
 
     public void initLiveEnv() {
         mAVOption = new AVOption();
