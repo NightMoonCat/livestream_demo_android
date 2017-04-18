@@ -3,6 +3,8 @@ package cn.moon.live.data.model;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
+import cn.moon.live.ucloud.AVOption;
+
 /**
  * Created by wei on 2016/5/27.
  */
@@ -85,7 +87,7 @@ public class LiveRoom implements Serializable {
     }
 
     public String getLivePushUrl() {
-        return livePushUrl;
+        return livePushUrl==null? AVOption.pushUrL : livePushUrl;
     }
 
     public void setLivePushUrl(String livePushUrl) {
@@ -93,7 +95,7 @@ public class LiveRoom implements Serializable {
     }
 
     public String getLivePullUrl() {
-        return livePullUrl;
+        return livePullUrl==null? AVOption.playUrL : livePullUrl;
     }
 
     public void setLivePullUrl(String livePullUrl) {

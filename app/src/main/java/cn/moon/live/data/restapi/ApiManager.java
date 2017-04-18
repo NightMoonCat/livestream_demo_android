@@ -19,6 +19,7 @@ import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.data.restapi.model.StatisticsType;
+import cn.moon.live.ucloud.AVOption;
 import cn.moon.live.utils.L;
 import cn.moon.live.utils.Result;
 import cn.moon.live.utils.ResultUtils;
@@ -220,13 +221,15 @@ public class ApiManager {
 
         String cover = coverUrl.substring(coverUrl.lastIndexOf("/") + 1);
         L.e(TAG,"cover=" + cover);
-        String nameCover = name + "#Live201612#" + cover;
+        String nameCover = name + "#live201612#" + cover;
         L.e(TAG,"nameCover="+nameCover);
 
         String id = createLiveRoom(nameCover, description);
         if (id != null) {
             liveRoom.setId(id);
             liveRoom.setChatroomId(id);
+            liveRoom.setLivePullUrl(AVOption.playUrL);
+            liveRoom.setLivePushUrl(AVOption.pushUrL);
         } else {
             liveRoom.setId(liveRoomId);
         }

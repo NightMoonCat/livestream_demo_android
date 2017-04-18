@@ -146,7 +146,7 @@ public class LiveListFragment extends Fragment {
             liveRoom.setChatroomId(room.getId());
 
             L.e(TAG," room.getName()="+ room.getName());
-            String s = "#Live201612#";
+            String s = "#live201612#";
             if (room.getName().indexOf(s) > 0) {
                 int index = room.getName().indexOf(s);
                 String name = room.getName().substring(0, index);

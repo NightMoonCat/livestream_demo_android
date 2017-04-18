@@ -62,7 +62,10 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         connect();
     }
     private void connect(){
-        connectChatServer();
+        loadingLayout.setVisibility(View.INVISIBLE);
+        connectLiveStream();
+        joinChatRoom();
+//        connectChatServer();
     }
 
     private void connectChatServer(){
@@ -73,7 +76,10 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
             }
 
             @Override public void onSuccess(LiveStatusModule.LiveStatus status) {
-                loadingLayout.setVisibility(View.INVISIBLE);
+//                loadingLayout.setVisibility(View.INVISIBLE);
+                if (status == null) {
+                    return;
+                }
                 switch (status){
                     case completed: //complete状态允许用户加入聊天室
                         showLongToast("直播已结束");
