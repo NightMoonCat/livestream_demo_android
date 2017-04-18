@@ -32,6 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.moon.live.I;
 import cn.moon.live.LiveConstants;
 import cn.moon.live.R;
 import cn.moon.live.ThreadPoolManager;
@@ -42,6 +43,7 @@ import cn.moon.live.data.restapi.LiveException;
 import cn.moon.live.data.restapi.model.StatisticsType;
 import cn.moon.live.ui.widget.PeriscopeLayout;
 import cn.moon.live.ui.widget.RoomMessagesView;
+import cn.moon.live.utils.PreferenceManager;
 import cn.moon.live.utils.Utils;
 
 /**
@@ -331,6 +333,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
                         //    barrageLayout.addBarrage(content,
                         //            EMClient.getInstance().getCurrentUser());
                         //}
+
+                        message.setAttribute(I.User.NICK, PreferenceManager.getInstance().getCurrentUserNick());
+
                         message.setChatType(EMMessage.ChatType.ChatRoom);
                         EMClient.getInstance().chatManager().sendMessage(message);
                         message.setMessageStatusCallback(new EMCallBack() {

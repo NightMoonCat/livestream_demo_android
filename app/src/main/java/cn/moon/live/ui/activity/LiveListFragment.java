@@ -104,6 +104,10 @@ public class LiveListFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
+                            swipeRefreshLayout.setRefreshing(false);
+                            liveRoomList.clear();
+
                             if (chatRooms != null && chatRooms.size() > 0) {
                                 L.e(TAG,"getChatRoom,chatRooms.size()="+chatRooms.size());
                                 for (EMChatRoom room : chatRooms) {
