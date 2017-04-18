@@ -218,8 +218,12 @@ public class ApiManager {
         liveRoom.setAnchorId(EMClient.getInstance().getCurrentUser());
         liveRoom.setCover(coverUrl);
 
+        String cover = coverUrl.substring(coverUrl.lastIndexOf("/") + 1);
+        L.e(TAG,"cover=" + cover);
+        String nameCover = name + "#Live201612#" + cover;
+        L.e(TAG,"nameCover="+nameCover);
 
-        String id = createLiveRoom(name, description);
+        String id = createLiveRoom(nameCover, description);
         if (id != null) {
             liveRoom.setId(id);
             liveRoom.setChatroomId(id);

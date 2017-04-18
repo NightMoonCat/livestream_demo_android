@@ -99,15 +99,19 @@ public class LiveListFragment extends Fragment {
                     //get chat room list
                     final List<EMChatRoom> chatRooms = result.getData();
                     pageCount = result.getPageCount();
+                    L.e(TAG,"getChatRoom(),pageCount"+pageCount);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (chatRooms != null && chatRooms.size() > 0) {
                                 L.e(TAG,"getChatRoom,chatRooms.size()="+chatRooms.size());
                                 for (EMChatRoom room : chatRooms) {
-                                    L.e(TAG,"room = "+room.getName());
-
                                     LiveRoom liveRoom = chatRoom2LiveRoom(room);
+
+                                    L.e(TAG,"room = "+liveRoom.getName());
+                                    L.e(TAG,"roomcount = "+liveRoom.getAudienceNum());
+                                    L.e(TAG,"getDescription = "+liveRoom.getDescription());
+
                                     if (liveRoom != null) {
                                         liveRoomList.add(liveRoom);
                                     }
@@ -137,10 +141,23 @@ public class LiveListFragment extends Fragment {
 
             liveRoom.setId(room.getOwner());
             liveRoom.setAnchorId(room.getOwner());
-            liveRoom.setAudienceNum(room.getMemberCount()-1);
-            liveRoom.setChatroomId(room.getId());
-            liveRoom.setName(room.getName());
+            liveRoom.setAudienceNum(room.getMemberCount());
             liveRoom.setDescription(room.getDescription());
+            liveRoom.setChatroomId(room.getId());
+
+            L.e(TAG," room.getName()="+ room.getName());
+            String s = "#Live201612#";
+            if (room.getName().indexOf(s) > 0) {
+                int index = room.getName().indexOf(s);
+                String name = room.getName().substring(0, index);
+                String cover = room.getName().substring(index+s.length());
+                L.e(TAG, "chatRoom2LiveRoom,name=" + name + ",cover=" + cover);
+
+                liveRoom.setName(name);
+                liveRoom.setCover("http://a1.easemob.com/i/superwechat201612/chatfiles/"+cover);
+            } else {
+                liveRoom.setName(room.getName());
+            }
         }
         return liveRoom;
     }
@@ -232,6 +249,8 @@ public class LiveListFragment extends Fragment {
         public void onBindViewHolder(PhotoViewHolder holder, int position) {
             LiveRoom liveRoom = liveRoomList.get(position);
             holder.anchor.setText(liveRoom.getName());
+            L.e(TAG,"onBindViewHolder(),audienceNum"+liveRoom.getAudienceNum());
+
             holder.audienceNum.setText(liveRoom.getAudienceNum() + "人");
             Glide.with(context)
                     .load(liveRoomList.get(position).getCover())
