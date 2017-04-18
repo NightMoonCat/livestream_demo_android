@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.moon.live.LiveConstants;
 import cn.moon.live.R;
 import cn.moon.live.ThreadPoolManager;
 import cn.moon.live.data.model.LiveRoom;
@@ -146,15 +147,14 @@ public class LiveListFragment extends Fragment {
             liveRoom.setChatroomId(room.getId());
 
             L.e(TAG," room.getName()="+ room.getName());
-            String s = "#live201612#";
-            if (room.getName().indexOf(s) > 0) {
-                int index = room.getName().indexOf(s);
+            if (room.getName().indexOf(LiveConstants.LIVE_COVER_INFIX) > 0) {
+                int index = room.getName().indexOf(LiveConstants.LIVE_COVER_INFIX);
                 String name = room.getName().substring(0, index);
-                String cover = room.getName().substring(index+s.length());
+                String cover = room.getName().substring(index+LiveConstants.LIVE_COVER_INFIX.length());
                 L.e(TAG, "chatRoom2LiveRoom,name=" + name + ",cover=" + cover);
 
                 liveRoom.setName(name);
-                liveRoom.setCover("http://a1.easemob.com/i/superwechat201612/chatfiles/"+cover);
+                liveRoom.setCover(LiveConstants.LIVE_COVER_PREFIX+cover);
             } else {
                 liveRoom.setName(room.getName());
             }

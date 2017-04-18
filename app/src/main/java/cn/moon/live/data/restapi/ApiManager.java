@@ -14,6 +14,7 @@ import java.util.List;
 
 import cn.moon.live.I;
 import cn.moon.live.LiveApplication;
+import cn.moon.live.LiveConstants;
 import cn.moon.live.data.model.Gift;
 import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
@@ -221,7 +222,7 @@ public class ApiManager {
 
         String cover = coverUrl.substring(coverUrl.lastIndexOf("/") + 1);
         L.e(TAG,"cover=" + cover);
-        String nameCover = name + "#live201612#" + cover;
+        String nameCover = name + LiveConstants.LIVE_COVER_INFIX+ cover;
         L.e(TAG,"nameCover="+nameCover);
 
         String id = createLiveRoom(nameCover, description);
