@@ -10,20 +10,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import cn.moon.live.ThreadPoolManager;
 
-import cn.moon.live.R;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.moon.live.R;
+import cn.moon.live.ThreadPoolManager;
 
 import static cn.moon.live.ui.activity.RoomUserManagementFragment.ManagementType.ADMIN;
 import static cn.moon.live.ui.activity.RoomUserManagementFragment.ManagementType.MUTE;
@@ -134,6 +138,8 @@ public class RoomUserManagementFragment extends Fragment {
 
         @Override public void onBindViewHolder(ManagementViewHolder holder, final int position) {
             final String username = userList.get(position);
+//            EaseUserUtils.setAppUserNick(username,holder.usernickView);
+            EaseUserUtils.setAppUserAvatar(getContext(),username,holder.userAvatarView);
             holder.usernickView.setText(username);
             switch (type) {
                 case ADMIN:
@@ -190,6 +196,8 @@ public class RoomUserManagementFragment extends Fragment {
     static class ManagementViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.txt_usernick) TextView usernickView;
         @BindView(R.id.btn_manager) TextView managerButton;
+        @BindView(R.id.img_avatar)
+        ImageView userAvatarView;
 
         public ManagementViewHolder(View itemView) {
             super(itemView);
