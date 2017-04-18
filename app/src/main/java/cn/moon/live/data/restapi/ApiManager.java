@@ -20,7 +20,6 @@ import cn.moon.live.data.model.LiveRoom;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.data.restapi.model.StatisticsType;
-import cn.moon.live.ucloud.AVOption;
 import cn.moon.live.utils.L;
 import cn.moon.live.utils.Result;
 import cn.moon.live.utils.ResultUtils;
@@ -229,8 +228,8 @@ public class ApiManager {
         if (id != null) {
             liveRoom.setId(id);
             liveRoom.setChatroomId(id);
-            liveRoom.setLivePullUrl(AVOption.playUrL);
-            liveRoom.setLivePushUrl(AVOption.pushUrL);
+            liveRoom.setLivePullUrl(liveRoom.getLivePullUrl());
+            liveRoom.setLivePushUrl(liveRoom.getLivePushUrl());
         } else {
             liveRoom.setId(liveRoomId);
         }

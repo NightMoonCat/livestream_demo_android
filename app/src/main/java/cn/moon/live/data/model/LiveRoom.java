@@ -87,7 +87,7 @@ public class LiveRoom implements Serializable {
     }
 
     public String getLivePushUrl() {
-        return livePushUrl==null? AVOption.pushUrL : livePushUrl;
+        return livePushUrl==null? AVOption.pushUrL+"_"+anchorId : livePushUrl;
     }
 
     public void setLivePushUrl(String livePushUrl) {
@@ -95,7 +95,7 @@ public class LiveRoom implements Serializable {
     }
 
     public String getLivePullUrl() {
-        return livePullUrl==null? AVOption.playUrL : livePullUrl;
+        return livePullUrl==null? AVOption.playUrL+"_"+anchorId : livePullUrl;
     }
 
     public void setLivePullUrl(String livePullUrl) {
