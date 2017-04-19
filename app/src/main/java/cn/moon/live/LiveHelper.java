@@ -16,7 +16,11 @@ import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +39,9 @@ public class LiveHelper {
 
     protected static final String TAG = "LiveHelper";
 
-    private Map<Integer, Gift> giftList;
+    private Map<Integer, Gift> giftMap;
+
+    private List<Gift> giftList;
 
     private EaseUI easeUI;
 
@@ -270,13 +276,37 @@ public class LiveHelper {
         DBManager.getInstance().closeDB();
     }
 
-    public Map<Integer, Gift> getGiftList() {
+    public Map<Integer, Gift> getGiftMap() {
+        if (giftMap == null) {
+            giftMap = mLiveModel.getGiftList();
+        }
+        if (giftMap == null) {
+            giftMap =  new HashMap<Integer, Gift>();
+        }
+        return giftMap;
+    }
+
+    public List<Gift> getGiftList() {
         if (giftList == null) {
-            giftList = mLiveModel.getGiftList();
+            if (getGiftMap().size() > 0) {
+                giftList = new ArrayList<>();
+                Iterator<Map.Entry<Integer, Gift>> iterator = giftMap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    giftList.add(iterator.next().getValue());
+                }
+                Collections.sort(giftList, new Comparator<Gift>() {
+                    @Override
+                    public int compare(Gift gift, Gift t1) {
+                        return gift.getGprice().compareTo(t1.getGprice());
+                    }
+                });
+                return giftList;
+            }
         }
         if (giftList == null) {
-            giftList =  new HashMap<Integer, Gift>();
+            giftList = new ArrayList<>();
         }
+
         return giftList;
     }
 
@@ -291,7 +321,7 @@ public class LiveHelper {
                         mLiveModel.setGiftList(list);
                         for (Gift gift : list) {
                             //保存到内存
-                            getGiftList().put(gift.getId(), gift);
+                            getGiftMap().put(gift.getId(), gift);
                         }
                     }
                 } catch (LiveException e) {

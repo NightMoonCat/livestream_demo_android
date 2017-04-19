@@ -555,8 +555,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     @OnClick(R.id.gift_image)
     void showGiftList() {
-        RoomUserManagementDialog managementDialog = new RoomUserManagementDialog(chatroomId);
-        managementDialog.show(getSupportFragmentManager(), "RoomUserManagementDialog");
+
+        GiftListDialog giftListDialog = GiftListDialog.newInstance();
+        giftListDialog.show(getSupportFragmentManager(),"GiftListDialog");
     }
     @OnClick(R.id.user_manager_image)
     void showUserList() {

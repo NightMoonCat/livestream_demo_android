@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="15dp"
+              android:gravity="center"
+              android:id="@+id/layout_gift"
+              android:weightSum="1">
+    <ImageView
+        android:id="@+id/ivGiftThumb"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"
+        android:layout_weight="0.42"/>
+    <TextView
+        android:id="@+id/tvGiftName"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/common_white"
+        android:textSize="13sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:text="商品名称"/>
+    <TextView
+        android:id="@+id/tvGiftPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_pressed"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:text="$399.99"/>
+</LinearLayout>
