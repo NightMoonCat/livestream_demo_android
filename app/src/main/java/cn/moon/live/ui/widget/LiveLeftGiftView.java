@@ -9,11 +9,11 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import cn.moon.live.R;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.moon.live.R;
 
 /**
  * Created by wei on 2016/6/7.
@@ -24,7 +24,7 @@ public class LiveLeftGiftView extends RelativeLayout {
     EaseImageView avatar;
     @BindView(R.id.name)
     TextView name;
-    @BindView(R.id.gift_image)
+    @BindView(R.id.give_gift_image)
     ImageView giftImage;
 
     public LiveLeftGiftView(Context context) {

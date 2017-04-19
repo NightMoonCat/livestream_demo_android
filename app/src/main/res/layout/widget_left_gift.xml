@@ -61,7 +61,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/gift_image"
+            android:id="@+id/give_gift_image"
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:layout_gravity="center_vertical"
