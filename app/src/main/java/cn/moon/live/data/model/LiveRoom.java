@@ -28,6 +28,21 @@ public class LiveRoom implements Serializable {
     //@SerializedName("liveshow_id")
     //private String showId;
 
+    @Override
+    public String toString() {
+        return "LiveRoom{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", audienceNum=" + audienceNum +
+                ", cover='" + cover + '\'' +
+                ", chatroomId='" + chatroomId + '\'' +
+                ", anchorId='" + anchorId + '\'' +
+                ", description='" + description + '\'' +
+                ", livePushUrl='" + livePushUrl + '\'' +
+                ", livePullUrl='" + livePullUrl + '\'' +
+                '}';
+    }
+
     public String getId() {
         return id;
     }

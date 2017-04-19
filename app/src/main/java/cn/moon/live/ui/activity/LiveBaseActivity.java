@@ -47,6 +47,7 @@ import cn.moon.live.data.restapi.model.StatisticsType;
 import cn.moon.live.ui.widget.LiveLeftGiftView;
 import cn.moon.live.ui.widget.PeriscopeLayout;
 import cn.moon.live.ui.widget.RoomMessagesView;
+import cn.moon.live.utils.L;
 import cn.moon.live.utils.PreferenceManager;
 import cn.moon.live.utils.Utils;
 
@@ -118,6 +119,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         liveRoom = (LiveRoom) getIntent().getSerializableExtra("liveroom");
+        L.e(TAG,"liveroom++++++++++++++"+liveRoom.toString());
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getChatroomId();
         anchorId = liveRoom.getAnchorId();
@@ -301,7 +303,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         public void onCmdMessageReceived(List<EMMessage> messages) {
             EMMessage message = messages.get(messages.size() - 1);
             if (LiveConstants.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
-                //showLeftGiftView(message.getFrom());
+                showLeftGiftView(message);
             } else if (LiveConstants.CMD_PRAISE.equals(((EMCmdMessageBody) message.getBody()).action())) {
                 showPraise(message.getIntAttribute(LiveConstants.EXTRA_PRAISE_COUNT, 1));
             }
