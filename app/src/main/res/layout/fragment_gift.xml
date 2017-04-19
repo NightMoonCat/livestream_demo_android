@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:background="#00000000">
+        android:background="#0000">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_gift"
             android:layout_width="match_parent"
@@ -18,6 +18,7 @@
         </android.support.v7.widget.RecyclerView>
 
         <RelativeLayout
+            android:background="@color/btn_white_normal"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center">
