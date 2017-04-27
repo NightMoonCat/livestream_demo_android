@@ -32,4 +32,17 @@ public interface LiveService {
         @Query(("chatRoomId")) String chatRoomId
 
     );
+    @GET("live/getBalance")
+    Call<String> getBalance(
+        @Query(("uname")) String username
+    );
+    @GET("live/getGiftStatementsByAnchor")
+    Call<String> getGiftStatementsByAnchor(
+        @Query(("anchor")) String anchor
+    );
+    @GET("live/recharge")
+    Call<String> recharge(
+        @Query(("uname")) String username,
+        @Query(("rmb")) int rmbCount
+    );
 }

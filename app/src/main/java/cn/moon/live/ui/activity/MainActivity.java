@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.floatingActionButton) void createLiveRoom() {
+
         startActivity(new Intent(this, CreateLiveRoomActivity.class));
     }
 

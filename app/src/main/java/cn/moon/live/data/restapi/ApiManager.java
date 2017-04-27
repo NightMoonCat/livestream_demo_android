@@ -15,7 +15,9 @@ import java.util.List;
 import cn.moon.live.I;
 import cn.moon.live.LiveApplication;
 import cn.moon.live.data.model.Gift;
+import cn.moon.live.data.model.GiftCount;
 import cn.moon.live.data.model.LiveRoom;
+import cn.moon.live.data.model.Wallet;
 import cn.moon.live.data.restapi.model.LiveStatusModule;
 import cn.moon.live.data.restapi.model.ResponseModule;
 import cn.moon.live.data.restapi.model.StatisticsType;
@@ -130,6 +132,22 @@ public class ApiManager {
         }
     }
 
+    public Wallet getBalance(String username) throws LiveException {
+        Call<String> call = liveService.getBalance(username);
+        Result<Wallet> result = handleResponseCallToResult(call, Wallet.class);
+        if (result != null && result.isRetMsg()) {
+            return result.getRetData();
+        }
+        return null;
+    }
+    public GiftCount getGiftStatementsByAnchor(String anchor) throws LiveException {
+        Call<String> call = liveService.getGiftStatementsByAnchor(anchor);
+        Result<GiftCount> result = handleResponseCallToResult(call, GiftCount.class);
+        if (result != null && result.isRetMsg()) {
+            return result.getRetData();
+        }
+        return null;
+    }
 
     public User loadUserInfo(String username) throws IOException, LiveException {
         Call<String> call = liveService.loadUserInfo(username);
